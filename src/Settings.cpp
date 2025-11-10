@@ -46,6 +46,5 @@ bool Settings::load(const std::wstring& path) {
     if (extractNumber(json, "digital_vibrance_on", v)) dv_on = (int)v;
     if (extractNumber(json, "digital_vibrance_off", v)) dv_off = (int)v;
 
-
     return true;
 }

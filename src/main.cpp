@@ -75,21 +75,21 @@ int main() {
             else        restoreAll();
         }
 
-        // -------------------------
-        // Reload settings.json
+
+        // F5 = apply OFF state
         // -------------------------
         if (GetAsyncKeyState(VK_F5) & 1) {
-            if (settings.load(getConfigPath())) {
-                std::cout << "Reloaded settings.json\n";
 
-                if (active) applyAll();
-                else        restoreAll();
+            std::cout << "Reloading settings.json + applying OFF values\n";
 
-            } else {
-                std::cout << "Failed to reload settings.json\n";
-            }
+            settings.load(getConfigPath());  // optional
+            gamma.apply(settings.gamma_off, settings.contrast_off);
+
+            if (vibReady)
+                vib.setLevel(settings.dv_off);
+
+            active = false;
         }
-
 
         // -------------------------
         // Exit
