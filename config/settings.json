@@ -1,0 +1,10 @@
+{
+  "gamma_on": 2.19,
+  "gamma_off": 1.0,
+
+  "contrast_on": 55,
+  "contrast_off": 50,
+
+  "digital_vibrance_on": 60,
+  "digital_vibrance_off": 50
+}

@@ -1,0 +1,76 @@
+# -----------------------------
+# Build directory
+# -----------------------------
+/build/
+/bin/
+/out/
+
+# -----------------------------
+# Compiled binaries
+# -----------------------------
+*.exe
+*.dll
+*.pdb
+*.lib
+*.a
+*.so
+*.o
+*.obj
+
+# MinGW/Clang specific object files
+*.lo
+*.la
+
+# Static / dynamic libraries generated locally
+*.dll.a
+*.lib
+*.exp
+
+# -----------------------------
+# Editor & OS files
+# -----------------------------
+# VS Code
+/.vscode/*
+!.vscode/settings.json      # keep your settings if needed
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains / CLion
+.idea/
+*.iml
+
+# Windows Explorer noise
+Thumbs.db
+Desktop.ini
+
+# -----------------------------
+# Logs & temp files
+# -----------------------------
+*.log
+*.tmp
+*.cache
+
+# -----------------------------
+# Config files that contain secrets
+# (none needed now, but here for future-proofing)
+# -----------------------------
+config/*.ini
+config/*.bak
+
+# Don't ignore our actual settings.json
+!config/settings.json
+
+# -----------------------------
+# CMake (if ever used)
+# -----------------------------
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# -----------------------------
+# Backup files
+# -----------------------------
+*.bak
+*~
+*.old
