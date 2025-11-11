@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <thread>
+#include <chrono>
 
 #include "GammaControl.hpp"
 #include "Settings.hpp"
@@ -20,93 +22,52 @@ static std::wstring getConfigPath() {
     return getExeDir() + L"\\..\\config\\settings.json";
 }
 
-int main() {
-    //------------------------------------------------------
-    // Load settings
-    //------------------------------------------------------
+// --------------------------------------------------------
+// TRUE background mode using WinMain
+// --------------------------------------------------------
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+
+    // (No console exists, so prints do nothing but are harmless)
+
     Settings settings;
-    if (!settings.load(getConfigPath())) {
-        std::wcout << L"Failed to load settings.json, using defaults.\n";
-    }
+    settings.load(getConfigPath());
 
-    //------------------------------------------------------
-    // Initialize controllers
-    //------------------------------------------------------
-    GammaControl gamma;           // gamma + contrast
-    VibranceControl vib;          // digital vibrance
+    GammaControl gamma;
+    VibranceControl vib;
 
-    bool vibReady = vib.init();   // gracefully handles failure
+    bool vibReady = vib.init();
+    bool active = false;
 
-    int cur, mn, mx;
-
-    if (vibReady && vib.getLevel(cur, mn, mx)) {
-        std::cout << "DV CURRENT = " << cur << "\n";
-        std::cout << "DV MIN     = " << mn << "\n";
-        std::cout << "DV MAX     = " << mx << "\n";
-    }
-
-    bool active = false;          // toggle state
-
-    //------------------------------------------------------
-    // Define lambda helpers
-    //------------------------------------------------------
-    auto applyAll = [&]() {
-        gamma.apply(settings.gamma_on, settings.contrast_on);
-        if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_on));
-    };
-
-    auto restoreAll = [&]() {
-        gamma.apply(settings.gamma_off, settings.contrast_off);
-        if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_off));
-    };
-
-
-    //------------------------------------------------------
-    // UI
-    //------------------------------------------------------
-    std::cout << "DarknessToggle (Gamma + Contrast + DV)\n";
-    std::cout << "F3  = toggle ON/OFF\n";
-    std::cout << "F5  = reload settings.json\n";
-    std::cout << "F12 = exit (restore defaults)\n";
-
-    //------------------------------------------------------
-    // Main loop
-    //------------------------------------------------------
     while (true) {
 
-        // -------------------------
-        // Toggle ON/OFF
-        // -------------------------
+        // F3 = toggle ON/OFF
         if (GetAsyncKeyState(VK_F3) & 1) {
             active = !active;
-            if (active) applyAll();
-            else        restoreAll();
+
+            if (active) {
+                gamma.apply(settings.gamma_on, settings.contrast_on);
+                if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_on));
+            } else {
+                gamma.apply(settings.gamma_off, settings.contrast_off);
+                if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_off));
+            }
         }
 
-
-        // F5 = apply OFF state
-        // -------------------------
+        // F5 = reload + force OFF state
         if (GetAsyncKeyState(VK_F5) & 1) {
-
-            std::cout << "Reloading settings.json + applying OFF values\n";
-
-            settings.load(getConfigPath());  // optional
+            settings.load(getConfigPath());
             gamma.apply(settings.gamma_off, settings.contrast_off);
-
-            if (vibReady)
-                vib.setLevel(dvPercentToNvapi(settings.dv_off));
-
+            if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_off));
             active = false;
         }
 
-        // -------------------------
-        // Exit
-        // -------------------------
+        // F12 = exit and restore defaults
         if (GetAsyncKeyState(VK_F12) & 1) {
-            restoreAll();
+            gamma.apply(settings.gamma_off, settings.contrast_off);
+            if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_off));
             return 0;
         }
 
-        Sleep(20);
+        Sleep(30);
     }
 }
