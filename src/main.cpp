@@ -37,6 +37,14 @@ int main() {
 
     bool vibReady = vib.init();   // gracefully handles failure
 
+    int cur, mn, mx;
+
+    if (vibReady && vib.getLevel(cur, mn, mx)) {
+        std::cout << "DV CURRENT = " << cur << "\n";
+        std::cout << "DV MIN     = " << mn << "\n";
+        std::cout << "DV MAX     = " << mx << "\n";
+    }
+
     bool active = false;          // toggle state
 
     //------------------------------------------------------
@@ -44,12 +52,12 @@ int main() {
     //------------------------------------------------------
     auto applyAll = [&]() {
         gamma.apply(settings.gamma_on, settings.contrast_on);
-        if (vibReady) vib.setLevel(settings.dv_on);
+        if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_on));
     };
 
     auto restoreAll = [&]() {
         gamma.apply(settings.gamma_off, settings.contrast_off);
-        if (vibReady) vib.setLevel(settings.dv_off);
+        if (vibReady) vib.setLevel(dvPercentToNvapi(settings.dv_off));
     };
 
 
@@ -86,7 +94,7 @@ int main() {
             gamma.apply(settings.gamma_off, settings.contrast_off);
 
             if (vibReady)
-                vib.setLevel(settings.dv_off);
+                vib.setLevel(dvPercentToNvapi(settings.dv_off));
 
             active = false;
         }

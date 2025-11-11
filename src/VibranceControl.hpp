@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <cmath>
 
 // Minimal NVAPI DVC wrapper (DVC2-style)
 class VibranceControl {
@@ -32,3 +33,13 @@ private:
     bool resolveFunctions();
     bool enumDisplay0();
 };
+
+static int dvPercentToNvapi(int percent) {
+    // Clamp to valid NVCP range (50–100)
+    if (percent < 50) percent = 50;
+    if (percent > 100) percent = 100;
+
+    // Map NVCP 50–100% → NVAPI 0–63
+    double scaled = (percent - 50) / 50.0;  // 0 → 1
+    return (int)std::round(scaled * 63.0); // 0 → 63
+}
