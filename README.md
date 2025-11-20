@@ -1,18 +1,35 @@
 # Night Vision Toggler
 
-Hotkey-based gamma + contrast + digital vibrance toggle.
+Night Vision Toggler is a lightweight Windows tool that lets you instantly toggle **gamma**, **contrast**, and **digital vibrance** for better visibility in dark game environments.  
+The program runs fully in the background with no console window and responds instantly to hotkeys.
 
-Requirements:
-- MinGW-w64 (g++)
-- NVIDIA GPU
+This project expands on the original GammaToggler by adding contrast and NVIDIA digital vibrance support.
 
-Hotkeys:
-- F3  = toggle ON/OFF
-- F5  = Restore System Defaults
-- F12 = exit (restores original gamma + DV)
+---
 
-Limitations:
-This is currently very early in production. A key limitations are that contrast and digital vibrance value does not perfectly line up with NVIDIA's control panel. I am running an approximation for both.
+## Features
 
-Credits:
-I adapted the code from DVC2 from DavidLekei
+- **Toggle ON/OFF** with a single key
+- **Gamma adjustment** via GDI gamma ramp
+- **Contrast adjustment** using a custom software curve
+- **Digital Vibrance** (NVIDIA-only) via NVAPI dynamic loading
+- **Configurable** using `settings.json`
+- **Portable** — single executable, no install required
+- Runs completely **in the background**
+
+---
+
+## Hotkeys
+
+| Key   | Action |
+|-------|--------|
+| **F3**  | Toggle ON/OFF |
+| **F5**  | Reload `settings.json` and apply **OFF** state |
+| **F12** | Exit the program and restore OFF/default values |
+
+---
+
+## Configuration
+
+Settings are stored in config/settings.json
+
