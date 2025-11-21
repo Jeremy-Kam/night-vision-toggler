@@ -52,3 +52,6 @@ Run the ```build.bat``` file.
 
 ## Usage
 Originally developed for using it with ARC Raiders or other competitive video games with dark environments, where having a higher gamma can give you an advantage. Morally, this is in a grey area, but it doesn't mess with the game itself. All it does is change the display, which anyone can do natively using NVIDIA Control Panel. You could also do something similar by making sure the room is as dark as possible and making the screen as bright as possible. I would recommend pinning the executable to start, so you can quickly start it up when starting up the game, and it will run in the background until you press F12.
+
+## Credits
+For the digital vibrance part of the code, I adapted the code from DVC2 from DavidLekei. They just set the vibrance to max for CS:GO, my code only bumps it up a little bit (50 -> 60), which is recommended for Tarkov.
